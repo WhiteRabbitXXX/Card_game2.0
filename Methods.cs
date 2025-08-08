@@ -30,19 +30,23 @@ namespace Methods
    class Mth
    {
         public string trump;
-        public List<Player> PlrLst = new List<Player>();
+        public static List<Player> PlrLst = new List<Player>();
         public void CrtPlr()
         {
-            if ((0<=PlrLst.Count)&(PlrLst.Count<4))
+            Console.Clear();
+            Console.WriteLine("Add player");
+            if (PlrLst.Count<4)
             {
+                Console.WriteLine("player name");
                 string name = Console.ReadLine();
+                Console.WriteLine("player type: 0 - CPU, 1 - player");
                 int type = Convert.ToInt32(Console.ReadLine());
-                Player player = new Player(name, type);
-                PlrLst.Add(player);
+                PlrLst.Add(new Player(name, type));
             }
             else
             {
                 Console.WriteLine("Too many players");
+                Console.ReadLine();
             }
         }
         public List<Card> DkUpd(string dct)
