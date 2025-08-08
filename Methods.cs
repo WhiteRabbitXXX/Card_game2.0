@@ -49,6 +49,14 @@ namespace Methods
                 Console.ReadLine();
             }
         }
+        public void Dealing(List<Card> Player, List<Card> deck)
+        {
+         for (int i = Player.Count - 1; i < 6; i++)
+         {
+            Player.Add(deck[0]);
+            deck.RemoveAt(0);
+         }
+        } 
         public List<Card> DkUpd(string dct)
         {
             FileStream fl_strm = new FileStream(dct, FileMode.OpenOrCreate);
