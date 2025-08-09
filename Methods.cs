@@ -51,7 +51,7 @@ namespace Methods
         }
         public void Dealing(List<Card> Player, List<Card> deck)
         {
-         for (int i = Player.Count - 1; i < 6; i++)
+         for (int i = Player.Count - 1; i < 5; i++)
          {
             Player.Add(deck[0]);
             deck.RemoveAt(0);

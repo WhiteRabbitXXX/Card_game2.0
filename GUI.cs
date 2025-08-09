@@ -49,12 +49,41 @@ namespace GUI
                 }
                 foreach (Player Player in Mth.PlrLst)
                 {
-                    Console.WriteLine($"{Player.Name} \t");
-                    foreach (Card Card in Player.PlrDck)
-                    {
-                        Console.WriteLine($"{Card.Rank} of {Card.Suit} ({Card.Prt})");
-                    }
+                    Console.Write(string.Format($"|{Player.Name, -10}({Player.PlrDck.Count})| \t"));
                 }
+                Console.WriteLine();
+                bool state = true;
+                for (int i = 0; state; i++)
+                {
+                    foreach (Player Player in Mth.PlrLst)
+                    {
+                        if (Player.PlrDck.Count > i)
+                        {
+                            Console.Write(string.Format($"{Player.PlrDck[i].Rank} of {Player.PlrDck[i].Suit} ({Player.PlrDck[i].Prt})\t"));
+                        }
+                        else
+                        {
+                            string blanc = "";
+                            Console.Write(string.Format("{0, -10}", blanc));
+                            int check = 0;
+                            for (int x = 0; x < Mth.PlrLst.Count; x++)
+                            {
+                                if (Mth.PlrLst[x].PlrDck.Count < i)
+                                {
+                                    check ++;
+                                    if (check == Mth.PlrLst.Count)
+                                    {
+                                        state = false;
+                                    }
+                                }
+                            }
+                            check = 0;
+                        }
+                    }
+                    Console.WriteLine();
+                }
+                
+                
                 Console.ReadLine();
             }
         }
