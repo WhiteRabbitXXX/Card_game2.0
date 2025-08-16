@@ -20,7 +20,6 @@ namespace Methods
         public string Name {get; set;}
         public int PlrTp {get; set;}
         public List<Card> PlrDck {get; set;} = new List<Card>();
-        public int PlrPrt {get; set;}
         public Player(string name, int plrtp)
         {
             Name = name;
@@ -29,8 +28,74 @@ namespace Methods
    }
    class Mth
    {
-        public string trump;
+        public static string trump;
         public static List<Player> PlrLst = new List<Player>();
+        public static List<Card> AtkTable = new List<Card>();
+        public static List<Card> DefTable = new List<Card>();
+        public void PlayerTurn()
+        {
+            int numb = Convert.ToInt32(Console.ReadLine());
+            AtkTable.Add(PlrLst[0].PlrDck[numb]);
+            PlrLst[0].PlrDck.RemoveAt(numb);
+            
+        }
+        public void PrintTable()
+        {
+            string message;
+            Console.Write("Attack:\t");
+            foreach (Card Card in AtkTable)
+            {
+                message = Card.Rank + " of " + Card.Suit;
+                Console.Write(string.Format("{0, -19}", message));
+            }
+            Console.WriteLine();
+            Console.Write("Defend:\t");
+            foreach (Card Card in DefTable)
+            {
+                message = Card.Rank + " of " + Card.Suit;
+                Console.Write(string.Format("{0, -19}", message));
+            }
+            
+        }
+        public void PrintPlayers()
+        {
+            Console.Clear();
+            foreach (Player Player in PlrLst)
+            {
+                Console.Write(string.Format($"|{Player.Name, -10}({Player.PlrDck.Count})| \t"));
+            }
+            Console.WriteLine();
+            bool state = true;
+            for (int i = 0; state; i++)
+            {
+                foreach (Player Player in PlrLst)
+                {
+                    if (Player.PlrDck.Count > i)
+                    {
+                        Console.Write(string.Format($"{Player.PlrDck[i].Rank} of {Player.PlrDck[i].Suit} ({Player.PlrDck[i].Prt})\t"));
+                    }
+                    else
+                    {
+                        string blanc = " ";
+                        Console.Write(string.Format("{0, -24}", blanc));
+                        int check = 0;
+                        for (int x = 0; x < PlrLst.Count; x++)
+                        {
+                            if (PlrLst[x].PlrDck.Count < i)
+                            {
+                                check ++;
+                                if (check == PlrLst.Count)
+                                {
+                                    state = false;
+                                }
+                            }
+                        }
+                        check = 0;
+                    }
+                }
+                Console.WriteLine();
+            }
+        }
         public void CrtPlr()
         {
             Console.Clear();
