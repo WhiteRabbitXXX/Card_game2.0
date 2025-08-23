@@ -6,6 +6,7 @@ namespace GUI
 {
     class gUI
     {
+        public bool round = false;
         public void Strt()
         {
             var Mth = new Methods.Mth();
@@ -46,16 +47,33 @@ namespace GUI
                 {
                     Mth.Dealing(Player.PlrDck, _main._main.deck);
                 }
-                bool round = true;
+                int position = 0;
+                round = true;
                 while(round)
                 {
                     Mth.PrintPlayers();
                     Mth.PrintTable();
-                    Mth.PlayerTurn();
+                    Console.WriteLine($"pos is {position}");
+                    Console.ReadLine();
+                    round = Mth.PlrLst[position].Turn();
+                    if (position == Mth.PlrLst.Count-1)
+                    {
+                        Console.WriteLine("pos clear");
+                        Console.ReadLine();
+                        position = 0;
+                    }
+                    else
+                    {
+                        Console.WriteLine("pos change");
+                        Console.ReadLine();
+                        position++;
+                    }
+                    
+                
                 }
-                
-                
-                int boom = Convert.ToInt32(Console.ReadLine());
+                Mth.ClearTbls();
+                Console.WriteLine("round end");
+                Console.ReadLine();
             }
                 
                 
