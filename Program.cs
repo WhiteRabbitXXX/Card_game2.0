@@ -21,11 +21,14 @@ namespace _main
             var Mth = new Methods.Mth();
             var GUI = new GUI.gUI(); 
             Init();
-            while (gameOn)
+            do
             {
                 GUI.Strt();
-                GUI.GamePlay();
-            }
+                if (gameOn)
+                {
+                    GUI.GamePlay();
+                }
+            }while (gameOn);
             Console.WriteLine("bye");
             Console.ReadLine();
         }

@@ -33,8 +33,8 @@ namespace GUI
                 else
                 {
                     Console.WriteLine("exit");
-                    menu = false;
                     _main._main.gameOn = false;
+                    menu = false;
                 }
             }
         }
