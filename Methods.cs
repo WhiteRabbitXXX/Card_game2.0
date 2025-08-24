@@ -26,17 +26,37 @@ namespace Methods
             Name = name;
             PlrTp = plrtp;
         }
+        void ClearTbls()
+        {
+            if (Mth.AtkTable.Count != 0)
+            {
+                Mth.AtkTable.Clear();
+            }
+            if (Mth.DefTable.Count != 0)
+            {
+                Mth.DefTable.Clear();
+            }
+        }
+        void Grab()
+        {
+            if (Mth.AtkTable.Count != 0)
+            {
+                PlrDck.InsertRange(0, Mth.AtkTable);
+            }
+            if (Mth.DefTable.Count != 0)
+            {
+                PlrDck.InsertRange(0, Mth.DefTable);
+            }
+        }
         bool DefChk(Card Atk, Card Def)
         {
             bool result = false;
             if ((Atk.Prt < Def.Prt) && ((Def.Suit == Atk.Suit)|(Def.Suit == Mth.trump)))
             {
-                Console.WriteLine("chk for def succes");
                 result = true;
             }
             else
             {
-                Console.WriteLine("chk for def not succes");
                 result = false;
             }
             return result;
@@ -47,8 +67,6 @@ namespace Methods
             {
                 if (Card.Rank == Atk.Rank)
                 {
-                    Console.WriteLine("chk for Rank opt1 succes");
-                    Console.ReadLine();
                     return true;
                 }
             }
@@ -58,8 +76,6 @@ namespace Methods
             }
             else if ((Mth.AtkTable[0].Rank == Atk.Rank))
             {
-                Console.WriteLine("chk for Rank opt2 succes");
-                Console.ReadLine();
                 return true;
             }
             else
@@ -70,20 +86,15 @@ namespace Methods
         }
         public bool Turn()
         {
-            Console.WriteLine($"chk Att is {Att}");
             bool Check = true;
             string input;
             int numb;
             if (Att|(Mth.AtkTable.Count == 0))
             {
                 Att = true;
-                Console.WriteLine($"{Name} chk for empty tbl succes");
-                Console.ReadLine();
             }
             else
             {
-                Console.WriteLine($"{Name} chk for empty tbl not succes");
-                Console.ReadLine();
                 Att = false;
             }
             if (PlrTp == 1)
@@ -91,13 +102,18 @@ namespace Methods
                 do{
                     Console.WriteLine($"await for player turn so PRINT IT GOOFY Att is {Att}");
                     input = Console.ReadLine();
-                    if ((input == "pass")|(input == "exit"))
+                    if ((input == "pass")|(input == ""))
                     {
-                        if (Att)
+                        if (!Att)
+                        {
+                            Grab();
+                        }
+                        else
                         {
                             Att = false;
                             Mth.PlrLst.Reverse();
                         }
+                        ClearTbls();
                         return false;
                     }
                     else
@@ -106,16 +122,12 @@ namespace Methods
                     }
                     if (Att&&(AtkChk(PlrDck[numb]))&Check)
                     {
-                        Console.WriteLine($"players turn for atk AtkTbl is {Mth.AtkTable.Count} Att is {Att}");
-                        Console.ReadLine();
                         Mth.AtkTable.Add(PlrDck[(numb)]);
                         PlrDck.RemoveAt(numb);
                         Check = false;
                     }
                     else if ((!Att)&&Check&(DefChk(Mth.AtkTable[Mth.AtkTable.Count -1], PlrDck[numb])))
                     {
-                        Console.WriteLine($"players turn for def AtkTbl is {Mth.AtkTable.Count} Att is {Att}");
-                        Console.ReadLine();
                         Mth.DefTable.Add(PlrDck[numb]);
                         PlrDck.RemoveAt(numb);
                         Check = false;
@@ -125,25 +137,27 @@ namespace Methods
             }
             else
             {
+                PlrDck.Sort((s1, s2) => s1.Prt.CompareTo(s2.Prt));
                 do {
                     for (int i = 0; Check; i++)
                     {
                         if (i == PlrDck.Count)
                         {
-                            Console.WriteLine("index chk");
-                            Console.ReadLine();
-                            if (Att)
+                            if (!Att)
+                            {
+                                Grab();
+                            }
+                            else
                             {
                                 Att = false;
                                 Mth.PlrLst.Reverse();
                             }
-                            return false;
+                            ClearTbls();
                             Check = false;
+                            return false;
                         }
                         if (Check&&Att&&(AtkChk(PlrDck[i])))
                         {
-                            Console.WriteLine($"bot turn for atk AtkTbl is {Mth.AtkTable.Count} Att is {Att}");
-                            Console.ReadLine();
                             Att = true;
                             Mth.AtkTable.Add(PlrDck[i]);
                             PlrDck.RemoveAt(i);
@@ -151,8 +165,6 @@ namespace Methods
                         }
                         else if (Check&&(!Att)&&(DefChk(Mth.AtkTable[Mth.AtkTable.Count -1], PlrDck[i])))
                         {
-                            Console.WriteLine($"bot turn for def AtkTbl is {Mth.AtkTable.Count} Att is {Att}");
-                            Console.ReadLine();
                             Mth.DefTable.Add(PlrDck[i]);
                             PlrDck.RemoveAt(i);
                             Check = false;
@@ -170,17 +182,6 @@ namespace Methods
         public static List<Card> AtkTable = new List<Card>();
         public static List<Card> DefTable = new List<Card>();
 
-        public void ClearTbls()
-        {
-            if (AtkTable.Count != 0)
-            {
-                AtkTable.Clear();
-            }
-            if (DefTable.Count != 0)
-            {
-                DefTable.Clear();
-            }
-        }
         public void PrintTable()
         {
             string message;
@@ -257,13 +258,30 @@ namespace Methods
                 Console.ReadLine();
             }
         }
-        public void Dealing(List<Card> Player, List<Card> deck)
+        public bool Dealing(List<Card> Player, List<Card> deck)
         {
-         for (int i = Player.Count - 1; i < 5; i++)
-         {
-            Player.Add(deck[0]);
-            deck.RemoveAt(0);
-         }
+            bool Deal = true;
+            do 
+            {
+                if (deck.Count !=0)
+                {
+                    if (Player.Count < 6)
+                    {
+                        Player.Add(deck[0]);
+                        deck.RemoveAt(0);
+                    }
+                    else
+                    {
+                        Deal = false;
+                    }
+                }
+                else
+                {
+                    Deal = false;
+                    return false;
+                }   
+            }while (Deal);
+            return true;
         } 
         public List<Card> DkUpd(string dct)
         {

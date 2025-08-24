@@ -26,6 +26,7 @@ namespace _main
                 GUI.Strt();
                 GUI.GamePlay();
             }
+            Console.WriteLine("bye");
             Console.ReadLine();
         }
     }

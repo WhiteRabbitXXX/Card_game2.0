@@ -7,10 +7,11 @@ namespace GUI
     class gUI
     {
         public bool round = false;
+        public bool menu = true;
+        public bool gamePlay = false;
         public void Strt()
         {
             var Mth = new Methods.Mth();
-            bool menu = true;
             while(menu)
             {
                 Console.Clear();
@@ -39,42 +40,44 @@ namespace GUI
         }
         public void GamePlay()
         {
+            gamePlay = true;
             var Mth = new Methods.Mth();
-            bool GamePlay = true;
-            while(GamePlay)
-            {
+            do{
+                round = true;
                 foreach (Player Player in Mth.PlrLst)
                 {
-                    Mth.Dealing(Player.PlrDck, _main._main.deck);
+                    if ((!Mth.Dealing(Player.PlrDck, _main._main.deck))&&(Player.PlrDck.Count == 0))
+                    {
+                        Console.WriteLine($"{Player.Name} win");
+                        Console.ReadLine();
+                        round = false;
+                    }
                 }
                 int position = 0;
-                round = true;
                 while(round)
                 {
                     Mth.PrintPlayers();
                     Mth.PrintTable();
-                    Console.WriteLine($"pos is {position}");
-                    Console.ReadLine();
                     round = Mth.PlrLst[position].Turn();
                     if (position == Mth.PlrLst.Count-1)
                     {
-                        Console.WriteLine("pos clear");
-                        Console.ReadLine();
                         position = 0;
                     }
                     else
                     {
-                        Console.WriteLine("pos change");
-                        Console.ReadLine();
                         position++;
                     }
-                    
-                
                 }
-                Mth.ClearTbls();
-                Console.WriteLine("round end");
-                Console.ReadLine();
-            }
+                Console.WriteLine("round end if you want exit - insert exit");
+                string input = Console.ReadLine();
+                if (input == "exit")
+                {
+                    Console.Clear();
+
+                    gamePlay = false;
+                    _main._main.gameOn = false;
+                }
+            }while(gamePlay);
                 
                 
                 
